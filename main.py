@@ -30,9 +30,9 @@ class Backup(object):
 		self.path = path
 		self.now_time = datetime.datetime.now().strftime("%Y%m%d%H%M")
 		self.index = self.path + '/' + self.now_time
-		self.img = self.path+'/'+self.now_time+'/img'
-		self.js = self.path+'/'+self.now_time+'/js'
-		self.css = self.path+'/'+self.now_time+'/css'
+		self.img = self.path+'/' + self.now_time + '/img'
+		self.js = self.path+'/' + self.now_time + '/js'
+		self.css = self.path+'/' + self.now_time + '/css'
 		# create dir
 		if not os.path.exists(self.index):
 			os.makedirs(self.index)
@@ -72,36 +72,36 @@ class Backup(object):
 			if each_src.name == 'img':
 				if each_src.has_attr('original'):
 					urllib.urlretrieve(each_src['original'],
-					    self.img+'/'+each_src['original'].split('/')[-1])
-					each_src['src'] = 'img/'+each_src['original'].split('/')[-1]
-					each_src['original'] = 'img/'+each_src['original'].split('/')[-1]
+					    self.img + '/'+each_src['original'].split('/')[-1])
+					each_src['src'] = 'img/' + each_src['original'].split('/')[-1]
+					each_src['original'] = 'img/' + each_src['original'].split('/')[-1]
 				else:
 					urllib.urlretrieve(each_src['src'], 
-					    self.img+'/'+each_src['src'].split('/')[-1])
+					    self.img+'/' + each_src['src'].split('/')[-1])
 					each_src['src'] = 'img/'+each_src['src'].split('/')[-1]
 			if each_src['src'].split('.')[-1] == 'js':
 				urllib.urlretrieve(each_src['src'], 
-				    self.js+'/'+each_src['src'].split('/')[-1])
-				each_src['src'] = 'js/'+each_src['src'].split('/')[-1]
+				    self.js+'/' + each_src['src'].split('/')[-1])
+				each_src['src'] = 'js/' + each_src['src'].split('/')[-1]
 			if each_src['src'].split('.')[-1] == 'css':
 				urllib.urlretrieve(each_src['src'], 
-				    self.css+'/'+each_src['src'].split('/')[-1])
-				each_src['src'] = 'css/'+each_src['src'].split('/')[-1]
+				    self.css+'/' + each_src['src'].split('/')[-1])
+				each_src['src'] = 'css/' + each_src['src'].split('/')[-1]
 		# some other js, css, img 
 		for each_href in hrefs:
 			print each_href
 			if each_href['href'].split('.') == 'img':
 				urllib.urlretrieve(each_href['href'], 
-				    self.img+'/'+each_href['href'].split('/')[-1])
-				each_href['href'] = 'img/'+each_href['href'].split('/')[-1]
+				    self.img+'/' + each_href['href'].split('/')[-1])
+				each_href['href'] = 'img/' + each_href['href'].split('/')[-1]
 			if each_href['href'].split('.') == 'js':
 				urllib.urlretrieve(each_href['href'], 
-				    self.img+'/'+each_href['href'].split('/')[-1])
-				each_href['href'] = 'js/'+each_href['href'].split('/')[-1]
+				    self.img+'/' + each_href['href'].split('/')[-1])
+				each_href['href'] = 'js/' + each_href['href'].split('/')[-1]
 			if each_href['href'].split('.') == 'css':
 				urllib.urlretrieve(each_href['href'], 
-				    self.img+'/'+each_href['href'].split('/')[-1])
-				each_href['href'] = 'css/'+each_href['href'].split('/')[-1]
+				    self.img+'/' + each_href['href'].split('/')[-1])
+				each_href['href'] = 'css/' + each_href['href'].split('/')[-1]
 		# save index.html
 		with open(self.index+'/index.html', 'w+') as f:
 			f.write(str(soup))
