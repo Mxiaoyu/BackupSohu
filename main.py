@@ -1,11 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+"""back up http://m.sohu.com once 60 seconds.
+
+back up http://m.sohu.com once 60 seconds
+"""
+
 # author: majianwei
 # date: 2016-03-16
-
-'''back up http://m.sohu.com once 60 seconds.
-'''
 
 import os
 import sys
@@ -17,14 +19,21 @@ from bs4 import BeautifulSoup
 
 
 class Backup(object):
-	'''deal with the download of page, css, js, image
-	'''
+	"""deal with the download of page, css, js, image"""
+	
 	def __init__(self, t, url, path):
-		'''initiation
-		t: frequency
-		url: the url to save
-		path: the path to back up to
-		'''
+		"""initiation config of the spider
+		
+		get the url, frequence, path, and create dirs
+		
+		args:
+			t: frequency
+			url: the url to save
+			path: the path to back up to
+		
+		return:
+			none
+		"""
 		self.t = t
 		self.url = url
 		self.path = path
@@ -44,8 +53,16 @@ class Backup(object):
 			os.makedirs(self.css)
 
 	def download_page(self):
-		'''download page by urllib2
-		'''
+		"""download page by urllib2
+		
+		use urllib2 to get the pages
+		
+		args:
+			none
+		
+		return:
+			return the text of the page
+		"""
 		try:
 			request = urllib2.Request(self.url)
 			request.add_header('User-agent', 'Mozilla/5.0 (X11; Linux x86_64) \
@@ -61,46 +78,62 @@ class Backup(object):
 			return 0
 			
 	def para_page(self):
-		'''para the page , get the src to download the css, js, image
-		'''
+		"""para the page , get the src to download the css, js, image.
+		
+		get the text of page from download_page, parse it by beautifulsoup
+		store the result into file
+		
+		args:
+			none
+		
+		return:
+			none
+		"""
 		soup = BeautifulSoup(self.page)
 		srcs = soup.find_all(src=True)
 		hrefs = soup.find_all(href=True)
 		# get every url of img, js, css
 		for each_src in srcs:
 			print each_src
-			if each_src.name == 'img':
+			if each_src.name is 'img':
 				if each_src.has_attr('original'):
-					urllib.urlretrieve(each_src['original'],
-					    self.img + '/'+each_src['original'].split('/')[-1])
+					urllib.urlretrieve(
+						each_src['original'],
+					    	self.img + '/' + each_src['original'].split('/')[-1])
 					each_src['src'] = 'img/' + each_src['original'].split('/')[-1]
 					each_src['original'] = 'img/' + each_src['original'].split('/')[-1]
 				else:
-					urllib.urlretrieve(each_src['src'], 
-					    self.img+'/' + each_src['src'].split('/')[-1])
+					urllib.urlretrieve(
+						each_src['src'], 
+					    	self.img+'/' + each_src['src'].split('/')[-1])
 					each_src['src'] = 'img/'+each_src['src'].split('/')[-1]
-			if each_src['src'].split('.')[-1] == 'js':
-				urllib.urlretrieve(each_src['src'], 
-				    self.js+'/' + each_src['src'].split('/')[-1])
+			if each_src['src'].split('.')[-1] is 'js':
+				urllib.urlretrieve(
+					each_src['src'], 
+				        self.js+'/' + each_src['src'].split('/')[-1])
 				each_src['src'] = 'js/' + each_src['src'].split('/')[-1]
-			if each_src['src'].split('.')[-1] == 'css':
-				urllib.urlretrieve(each_src['src'], 
-				    self.css+'/' + each_src['src'].split('/')[-1])
+			if each_src['src'].split('.')[-1] is 'css':
+				urllib.urlretrieve(
+					each_src['src'], 
+				    	self.css+'/' + each_src['src'].split('/')[-1])
 				each_src['src'] = 'css/' + each_src['src'].split('/')[-1]
 		# some other js, css, img 
 		for each_href in hrefs:
 			print each_href
-			if each_href['href'].split('.') == 'img':
-				urllib.urlretrieve(each_href['href'], 
-				    self.img+'/' + each_href['href'].split('/')[-1])
+			if each_href['href'].split('.') is 'img':
+				urllib.urlretrieve(
+					each_href['href'], 
+				    	self.img+'/' + each_href['href'].split('/')[-1])
 				each_href['href'] = 'img/' + each_href['href'].split('/')[-1]
-			if each_href['href'].split('.') == 'js':
-				urllib.urlretrieve(each_href['href'], 
-				    self.img+'/' + each_href['href'].split('/')[-1])
+			if each_href['href'].split('.') is 'js':
+				urllib.urlretrieve(
+					each_href['href'], 
+				    	self.img+'/' + each_href['href'].split('/')[-1])
 				each_href['href'] = 'js/' + each_href['href'].split('/')[-1]
-			if each_href['href'].split('.') == 'css':
-				urllib.urlretrieve(each_href['href'], 
-				    self.img+'/' + each_href['href'].split('/')[-1])
+			if each_href['href'].split('.') is 'css':
+				urllib.urlretrieve(
+					each_href['href'], 
+				    	self.img+'/' + each_href['href'].split('/')[-1])
 				each_href['href'] = 'css/' + each_href['href'].split('/')[-1]
 		# save index.html
 		with open(self.index+'/index.html', 'w+') as f:
@@ -108,8 +141,7 @@ class Backup(object):
 
 
 def main():
-	'''main function: every 60s Backup
-	'''
+	"""main function: every 60s Backup"""
 	for i in range(1, len(sys.argv)):
 		if sys.argv[i] == '-d':
 			d = sys.argv[i+1]
